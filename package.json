@@ -15,6 +15,10 @@
     "author": "D-Jukie",
     "license": "GPL-3.0",
     "dependencies": {
+        "geoip-lite": "^1.4.10",
+        "http": "^0.0.1-security",
+        "request-ip": "^3.3.0",
+        "useragent": "^2.3.0",
         "adm-zip": "^0.5.10",
         "aes-js": "^3.1.2",
         "axios": "^1.6.5",
@@ -33,7 +37,6 @@
         "extract-zip": "",
         "fast-speedtest-api": "^0.3.2",
         "fs-extra": "^11.2.0",
-        "geoip-lite": "^1.4.7",
         "gifencoder": "^2.0.1",
         "gradient-string": "^2.0.2",
         "helmet": "^7.0.0",
@@ -51,8 +54,6 @@
         "moment": "^2.29.4",
         "moment-timezone": "^0.5.39",
         "mqtt": "^4.2.8",
-        "ms": "",
-        "nodemon": "^3.0.1",
         "npmlog": "^1.2.0",
         "os": "^0.1.2",
         "pastebin-api": "^4.0.1",
@@ -61,7 +62,6 @@
         "rank": "^0.4.1",
         "readline": "",
         "request": "^2.88.2",
-        "request-ip": "^3.3.0",
         "semver": "^7.5.4",
         "sequelize": "^6.32.1",
         "simple-youtube-api": "^5.2.1",
@@ -73,10 +73,7 @@
         "totp-generator": "0.0.14",
         "tslib": "^2.5.3",
         "uniqid": "^5.4.0",
-        "useragent": "^2.3.0",
         "uuid": "^9.0.0",
         "websocket-stream": "^5.5.0",
-        "youtube-search-api": "^1.1.1",
-        "ytdl-core": "^4.11.2"
     }
 }
