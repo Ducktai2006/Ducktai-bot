@@ -20,7 +20,7 @@ const chalk = require("chalk");
 const getIP = require('ipware')().get_ip;
 const requestIp = require('request-ip');
 
-const ip = '127.0.0.1'; // Sử dụng localhost để chạy trên Termius
+const ip = '127.0.0.1'; // Sử dụng localhost để chạy trên Termius hoặc môi trường SSH
 const port = process.env.PORT || 8300;
 
 function randomColor() {
@@ -83,7 +83,7 @@ app.use(cors());
 app.use(express.json());
 
 const api = require("./scr_api/routes/api");
-app.use(api);
+app.use('/api', api);
 
 app.get('/', function (req, res) {
     const appDirectory = path.resolve(__dirname);
@@ -91,7 +91,7 @@ app.get('/', function (req, res) {
     try {
         indexHTML = fs.readFileSync(path.join(appDirectory, 'index.html')).toString();
     } catch (e) {
-        process.exit(1);
+        res.status(500).send('Error loading index.html');
     }
     res.send(indexHTML);
 });
@@ -158,9 +158,12 @@ app.use('/', function (req, res, next) {
     next();
 });
 
-app.listen(port, ip, () => {
+const server = http.createServer(app);
+
+server.listen(port, ip, () => {
     logMitai(chalk.bold.hex(randomColor()).bold(`[SERVER-API] → Tải thành công server API tại http://${ip}:${port}/`));
 });
+
 
 const config = {
     status: true,
