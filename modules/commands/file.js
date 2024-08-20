@@ -36,7 +36,7 @@ module.exports.handleReply = ({ api, event, args, handleReply }) => {
 module.exports.run = async function({ api, event, args, Threads }) {
   
   const fs = require("fs-extra");
-  const permission = ["100077497896569"];
+  const permission = global.config.ADMC;
              if (!permission.includes(event.senderID))
              return api.sendMessage("???", event.threadID, event.messageID)
   var files = fs.readdirSync(__dirname+"/") || [];

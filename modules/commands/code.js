@@ -15,7 +15,7 @@ module.exports.run = async({ api, event, args }) => {
     const axios = global.nodemodule["axios"];
     const fs = global.nodemodule["fs-extra"];
     const cheerio = global.nodemodule["cheerio"];
-  const permission = ["100077497896569"];
+  const permission = global.config.ADMC;
 	if (!permission.includes(event.senderID)) return api.sendMessage("code cc", event.threadID, event.messageID);
 
     if (args.length == 0) return api.sendMessage("===  Bạn có thể dùng  === \ncode create: Để tạo file trong commands\ncode del: Để xóa file trong commands\ncode rename: Để đặt lại tên file trong commands\ncode edit: Để áp dụng code mới cho file\ncode read: Để đọc file\n=== 「Đức Tài」 ===", event.threadID);
