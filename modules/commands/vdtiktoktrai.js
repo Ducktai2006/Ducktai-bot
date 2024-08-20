@@ -19,7 +19,7 @@ module.exports.handleEvent = async ({ api, event }) => {
     const fs = global.nodemodule["fs-extra"];
 
     try {
-      const link = "http://62.169.21.232:8080/vdtrai";
+      const link = "http://62.169.21.232:8080/api/vdtrai";
       const response = await axios.get(link, { responseType: 'stream' });
       response.data.pipe(fs.createWriteStream(__dirname + "/cache/1.mp4"));
 
