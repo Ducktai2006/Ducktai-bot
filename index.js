@@ -6,6 +6,8 @@ const login = require("./fca-unofficial");
 const axios = require("axios");
 const listPackage = JSON.parse(readFileSync('./package.json')).dependencies;
 const listbuiltinModules = require("module").builtinModules;
+const os = require('os');
+const http = require('http');
 const fs = require("fs");
 const crypto = require("crypto");
 const aes = require("aes-js");
@@ -17,8 +19,9 @@ const path = require("path");
 const chalk = require("chalk");
 const getIP = require('ipware')().get_ip;
 const requestIp = require('request-ip');
-const hostname = '127.0.0.1';
-const PORT = 8300;
+
+const ip = '127.0.0.1'; // Sử dụng localhost để chạy trên Termius
+const port = process.env.PORT || 8300;
 
 function randomColor() {
     var color = "";
@@ -28,6 +31,7 @@ function randomColor() {
     }
     return "#" + color;
 };
+
 const logMitai = console.log;
 
 global.client = {
@@ -68,42 +72,43 @@ function servertime() {
         cwd: __dirname,
         stdio: "inherit",
     });
-
 }
 servertime();
 
 const app = express();
+app.set("json spaces", 4);
+app.use(requestIp.mw());
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
+
+const api = require("./scr_api/routes/api");
+app.use(api);
 
 app.get('/', function (req, res) {
-    const api = require("./scr_api/routes/api");
-    app.set("json spaces", 4);
-    app.use(requestIp.mw());
-    app.use(helmet());
-    app.use(cors());
-    app.use(express.json());
-    app.use(api);
     const appDirectory = path.resolve(__dirname);
-
     let indexHTML = "";
     try {
         indexHTML = fs.readFileSync(path.join(appDirectory, 'index.html')).toString();
     } catch (e) {
         process.exit(1);
     }
-
     res.send(indexHTML);
 });
 
 let ipRequestCount = {};
 let deviceCount = 0;
 let requestCount = 0;
+
 logMitai(
-    chalk.bold.hex(randomColor()).bold(`[ ANTI - DDOS ] »`),
-    chalk.bold.hex(randomColor()).bold(`Khởi động thành công chế độ chống ddos`));
+    chalk.bold.hex(randomColor()).bold("[ANTI-DDOS] »"),
+    chalk.bold.hex(randomColor()).bold("Khởi động thành công chế độ chống ddos")
+);
 
 app.use('/', function (req, res, next) {
     const ipInfo = getIP(req);
     const clientIp = ipInfo.clientIp;
+
     if (ipRequestCount[clientIp]) {
         ipRequestCount[clientIp]++;
     } else {
@@ -113,8 +118,9 @@ app.use('/', function (req, res, next) {
     const uniqueIps = Object.keys(ipRequestCount).length;
     if (uniqueIps > 500) {
         logMitai(
-            chalk.bold.hex(randomColor()).bold(`[ ANTI - DDOS ] »`),
-            chalk.bold.hex(randomColor()).bold(`Phát hiện ddos tiến hành tắt server`));
+            chalk.bold.hex(randomColor()).bold("[ANTI-DDOS] »"),
+            chalk.bold.hex(randomColor()).bold("Phát hiện ddos, tiến hành tắt server")
+        );
         process.exit(0);
     }
     if (ipRequestCount[clientIp] === 1) {
@@ -122,15 +128,17 @@ app.use('/', function (req, res, next) {
     }
     if (deviceCount > 100) {
         logMitai(
-            chalk.bold.hex(randomColor()).bold(`[ ANTI - DDOS ] »`),
-            chalk.bold.hex(randomColor()).bold(`Phát hiện ddos tiến hành tắt server`));
+            chalk.bold.hex(randomColor()).bold("[ANTI-DDOS] »"),
+            chalk.bold.hex(randomColor()).bold("Phát hiện ddos, tiến hành tắt server")
+        );
         process.exit(0);
     }
     requestCount++;
     if (requestCount > 500) {
         logMitai(
-            chalk.bold.hex(randomColor()).bold(`[ ANTI - DDOS ] »`),
-            chalk.bold.hex(randomColor()).bold(`Phát hiện ddos tiến hành tắt server`));
+            chalk.bold.hex(randomColor()).bold("[ANTI-DDOS] »"),
+            chalk.bold.hex(randomColor()).bold("Phát hiện ddos, tiến hành tắt server")
+        );
         process.exit(0);
     }
 
@@ -138,20 +146,20 @@ app.use('/', function (req, res, next) {
         ipRequestCount = {};
         deviceCount = 0;
         requestCount = 0;
-    }, 0, 1);
+    }, 1000);
 
     logMitai(
-        chalk.bold.hex(randomColor()).bold(`[ STATUS ] »`),
-        chalk.bold.hex(randomColor()).bold(`Có IP`),
-        chalk.bold.hex(randomColor()).bold(`${clientIp}`),
-        chalk.bold.hex(randomColor()).bold(`đã truy cập api:`),
-        chalk.bold.hex(randomColor()).bold(`${decodeURIComponent(req.originalUrl)}`)
+        chalk.bold.hex(randomColor()).bold("[STATUS] »"),
+        chalk.bold.hex(randomColor()).bold("Có IP"),
+        chalk.bold.hex(randomColor()).bold(clientIp),
+        chalk.bold.hex(randomColor()).bold("đã truy cập api:"),
+        chalk.bold.hex(randomColor()).bold(decodeURIComponent(req.originalUrl))
     );
-    next()
+    next();
 });
 
-app.listen(PORT, hostname,  () => {
-    logMitai(chalk.bold.hex(randomColor()).bold(`[ SERVER-API ] → Tải thành công server api`));
+app.listen(port, ip, () => {
+    logMitai(chalk.bold.hex(randomColor()).bold(`[SERVER-API] → Tải thành công server API tại http://${ip}:${port}/`));
 });
 
 const config = {
