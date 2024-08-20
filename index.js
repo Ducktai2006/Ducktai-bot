@@ -17,6 +17,7 @@ const path = require("path");
 const chalk = require("chalk");
 const getIP = require('ipware')().get_ip;
 const requestIp = require('request-ip');
+const hostname = '127.0.0.1';
 const PORT = 8300;
 
 function randomColor() {
@@ -149,7 +150,7 @@ app.use('/', function (req, res, next) {
     next()
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, hostname,  () => {
     logMitai(chalk.bold.hex(randomColor()).bold(`[ SERVER-API ] → Tải thành công server api`));
 });
 
