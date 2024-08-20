@@ -20,8 +20,10 @@ const chalk = require("chalk");
 const getIP = require('ipware')().get_ip;
 const requestIp = require('request-ip');
 
-const ip = '127.0.0.1'; // Sử dụng localhost để chạy trên Termius hoặc môi trường SSH
-const port = process.env.PORT || 8300;
+const networkInterfaces = os.networkInterfaces();
+const ip = networkInterfaces['eth0'] ? networkInterfaces['eth0'][0].address : '127.0.0.1';
+
+const port = process.env.PORT || 8080;
 
 function randomColor() {
     var color = "";
@@ -106,8 +108,7 @@ logMitai(
 );
 
 app.use('/', function (req, res, next) {
-    const ipInfo = getIP(req);
-    const clientIp = ipInfo.clientIp;
+    const clientIp = requestIp.getClientIp(req);
 
     if (ipRequestCount[clientIp]) {
         ipRequestCount[clientIp]++;
@@ -163,7 +164,6 @@ const server = http.createServer(app);
 server.listen(port, ip, () => {
     logMitai(chalk.bold.hex(randomColor()).bold(`[SERVER-API] → Tải thành công server API tại http://${ip}:${port}/`));
 });
-
 
 const config = {
     status: true,
