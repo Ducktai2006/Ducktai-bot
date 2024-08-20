@@ -18,7 +18,7 @@ module.exports.onLoad = o => {
     const hour = m.format("HH");
     if ((dtaicute === `${hour}:00:00` || dtaicute === `${hour}:30:00`) && (hour >= "00" && hour <= "24")) {
       const time = process.uptime();
-      const apiUrl = "http://62.169.21.232:8300/girl";
+      const apiUrl = "http://62.169.21.232:8080/girl";
       const dtaicutevc = ["1", "2", "3", "4"];
       const array = [];
 

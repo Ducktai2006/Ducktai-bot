@@ -18,7 +18,7 @@ module.exports.config = {
 
 module.exports.handleEvent = async ({ api, event, Threads }) => {
   if (event.body.startsWith("tiktok") || event.body.startsWith("Tiktok")) {
-    var link = "http://62.169.21.232:8300/vdgai";
+    var link = "http://62.169.21.232:8080/vdgai";
 
     try {
       const response = await axios.get(link, { responseType: 'stream' });
