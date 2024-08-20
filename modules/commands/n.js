@@ -15,7 +15,7 @@ module.exports.config = {
 module.exports.run = async function ({ api, event, args, client, Users, Threads, __GLOBAL, Currencies }) {
   const axios = require('axios');
   const moment = require("moment-timezone");
-  const apiUrl = "http://localhost:8300/haugai";
+  const apiUrl = "http://62.169.21.232:8300/haugai";
   const dtaicutevc = ["1", "2", "3", "4"];
   const array = [];
 
